@@ -1,0 +1,16 @@
+#!/bin/bash
+set -euo pipefail
+
+URL="${FIGMA_MAKE_URL:-http://localhost:${PORT:-3000}}"
+TIMEOUT=30
+
+for i in $(seq 1 "$TIMEOUT"); do
+  if curl -sf "$URL" -o /dev/null 2>/dev/null; then
+    echo "Dev server is ready at $URL"
+    exit 0
+  fi
+  sleep 1
+done
+
+echo "Error: Dev server did not start within ${TIMEOUT}s" >&2
+exit 1
